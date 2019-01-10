@@ -1,28 +1,51 @@
+// Initialization
 require("dotenv").config();
+let keys = require("./keys.js");
+var fs = require("fs");
+var axios = require("axios");
+// var spotify = new Spotify(keys.spotify);
+var searchType = process.argv[2];
+var searchValue = process.argv;
 
-// Add the code required to import the `keys.js` file and store it in a variable.
-let apiKeys = require("./keys.js");
-
+/*
+// Key Access
 for (let songs in keys) {
   console.log("The");
 }
-// You should then be able to access your keys information like so
+*/
+// Switch statement to determine which function will run.
+switch (searchType) {
+  case "concert-this":
+    concert();
+    break;
 
-var spotify = new Spotify(keys.spotify);
+  case "spotify-this-song":
+    spotify();
+    break;
 
-var axios = require("axios");
+  case "movie-this":
+    movie();
+    break;
 
-//Axios request
-var movieName = "";
-for (i = 2; i < process.argv.length; i++) {
-  movieName = movieName + " " + process.argv[i];
+  case "what-it-says":
+    says();
+    break;
 }
 
-axios
-  .get(
-    "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy"
-  )
-  .then(
+//Movie function
+function movie() {
+  var movieName = "";
+  for (var i = 3; i < searchValue.length; i++) {
+    if (i > 3 && i < searchValue.length) {
+      movieName = movieName + "+" + searchValue[i];
+    } else {
+      movieName += searchValue[i];
+    }
+  }
+  var axiosQuery =
+    "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=2413de60";
+
+  axios.get(axiosQuery).then(
     function(response) {
       console.log(
         "The movie's title is: " +
@@ -34,9 +57,8 @@ axios
           "IMDB Rating: " +
           response.data.imdbRating +
           "\n" +
-          /*tomato rating probably needs attention*/
           "Rotten Tomatoes Rating: " +
-          response.data.Ratings +
+          response.data.Ratings[1].Value +
           "\n" +
           "Country: " +
           response.data.Country +
@@ -57,6 +79,50 @@ axios
       console.log(err);
     }
   );
+}
+
+// Bands in Town
+// Querying the bandsintown api for the selected artist, the ?app_id parameter is required, but can equal anything
+
+function concert() {
+  var queryURL =
+    "https://rest.bandsintown.com/artists/" + artist + "?app_id=codingbootcamp";
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+    // Printing the entire object to console
+    console.log(response);
+
+    // Constructing HTML containing the artist information
+    var artistName = response.name;
+    var artistURL = response.url.append(artistName);
+    var upcomingEvents = response.upcoming_event_count;
+    var goToArtist = response.url;
+
+    // Empty the contents of the artist-div, append the new artist content
+    console.log(
+      "Artist: " +
+        artistURL +
+        "\n" +
+        "Upcoming Events: " +
+        upcomingEvents +
+        "\n" +
+        "Artist Page: " +
+        goToArtist
+    );
+  });
+}
+
+//Says function
+function says() {
+  fs.readFile("random.txt", "utf8", function(error, data) {
+    if (error) {
+      return console.log(err);
+    }
+    console.log("It Says to: " + data.toFixed(2));
+  });
+}
 
 // ----------------------------------------------
 /*
@@ -138,4 +204,11 @@ Make it so liri.js can take in one of the following commands:
   * It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
 
   * Edit the text in random.txt to test out the feature for movie-this and concert-this.
-*/
+------------------------------------------------------------------------------------------------
+demonstration
+  node liri.js spotify-this-song come\ sail\ away
+  node liri.js movie-this gladiator
+  node liri.js concert-this metallica
+  results popup in terminal
+  Thu, Jan 3 2019 - Power of Packages -2:00 remaining
+  */
