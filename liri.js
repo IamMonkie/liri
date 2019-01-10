@@ -5,7 +5,8 @@ var fs = require("fs");
 var axios = require("axios");
 var moment = require("moment");
 var bandsintown = require("bandsintown");
-// var spotify = new Spotify(keys.spotify);
+var Spotify = require("node-spotify-api");
+var spotify = new Spotify(keys.spotify);
 var searchType = process.argv[2];
 var searchValue = process.argv;
 
@@ -35,7 +36,7 @@ switch (searchType) {
 
 // ----------------------------------------------------
 /*
-// User Input Function
+// User Input Function 
 function userInput() {
   var searchValue = process.argv;
   var userInput = "";
@@ -47,6 +48,7 @@ function userInput() {
     }
   }
 }*/
+// ----------------------------------------------------
 
 // Bands in Town
 // Querying the bandsintown api for the selected artist, the ?app_id parameter is required, but can equal anything
@@ -97,6 +99,7 @@ function concert() {
   });
   */
 }
+// ----------------------------------------------------
 
 //Movie function
 function movie() {
@@ -147,30 +150,38 @@ function movie() {
     }
   );
 }
-/*
+
+// ----------------------------------------------------
+
 // Spotify function
 function song() {
-    var spotifySearch = "";
-    for (var i = 3; i < searchValue.length; i++) {
-      if (i > 3 && i < searchValue.length) {
-        spotifySearch = spotifySearch + "+" + searchValue[i];
+  var spotifySearch = "";
+  for (var i = 3; i < searchValue.length; i++) {
+    if (i > 3 && i < searchValue.length) {
+      spotifySearch = spotifySearch + "+" + searchValue[i];
+    } else {
+      spotifySearch += searchValue[i];
+    }
+  }
+
+  spotifySearch.search(
+    {
+      type: "track",
+      query: spotifySearch
+    },
+    function(err, data) {
+      if (err) {
+        return console.log("Error occurred: " + err);
       } else {
-        spotifySearch += searchValue[i];
+        console.log("Song: " + data.tracks.items[0].name);
       }
     }
+  );
+}
 
-    spotifySearch.search({ 
-      type: 'track', 
-      query: 'All the Small Things' }, 
-      function(err, data) {
-      if (err) {
-        return console.log('Error occurred: ' + err);
-      }
-     
-    console.log(data); 
-    });
-    */
 /*
+// ----------------------------------------------------
+
 //Says function
 function says() {
   fs.readFile("random.txt", "utf8", function(error, data) {
