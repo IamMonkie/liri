@@ -1,10 +1,12 @@
-console.log("keys loaded");
+// console.log("keys loaded");
 
+// Spotify
 exports.spotify = {
   id: process.env.SPOTIFY_ID,
   secret: process.env.SPOTIFY_SECRET
 };
 
-exports.omdb = {
-  key: process.env.OMDB_ID
+// Bands in town
+exports.bandsintown = {
+  app_id: process.env.app_id
 };

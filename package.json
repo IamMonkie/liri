@@ -18,7 +18,9 @@
   "homepage": "https://github.com/IamMonkie/liri#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "bandsintown": "^1.0.1",
     "dotenv": "^6.2.0",
+    "moment": "^2.23.0",
     "node-spotify-api": "^1.0.7"
   }
 }
