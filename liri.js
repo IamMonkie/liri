@@ -155,6 +155,7 @@ function movie() {
 
 // Spotify function
 function song() {
+  console.log("HIT");
   var spotifySearch = "";
   for (var i = 3; i < searchValue.length; i++) {
     if (i > 3 && i < searchValue.length) {
@@ -163,13 +164,14 @@ function song() {
       spotifySearch += searchValue[i];
     }
   }
-
-  spotifySearch.search(
+  console.log("Spotify Search: " + spotifySearch);
+  spotify.search(
     {
       type: "track",
       query: spotifySearch
     },
     function(err, data) {
+      console.log(data);
       if (err) {
         return console.log("Error occurred: " + err);
       } else {
