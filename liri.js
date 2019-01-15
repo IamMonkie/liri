@@ -155,7 +155,6 @@ function movie() {
 
 // Spotify function
 function song() {
-  console.log("HIT");
   var spotifySearch = "";
   for (var i = 3; i < searchValue.length; i++) {
     if (i > 3 && i < searchValue.length) {
@@ -164,7 +163,7 @@ function song() {
       spotifySearch += searchValue[i];
     }
   }
-  console.log("Spotify Search: " + spotifySearch);
+  // console.log("Spotify Search: " + spotifySearch);
   spotify.search(
     {
       type: "track",
